@@ -16,15 +16,14 @@ let getAllIndexes = (arr, val) => {
 let getBody = url => fetch(url)
   .then(res =>res.text());
 
-getBody('https://sv.wikipedia.org/wiki/Lessebo').then(body => {
-  let $body = cheerio.load(body);
-  console.log($body('#firstHeading').html())
-  let content = $body('#bodyContent').text();
-  let years = Array(500).fill(0).map((v,i) => 1500+i);
-  let noChars = 50
-  
-  console.log(
-    years.filter(year => !!~content.indexOf(year))
+let getData = () => new Promise(function(res) {
+  getBody(getRandomPageLink()).then(body => {
+    let $body = cheerio.load(body);
+    let title = $body('#firstHeading').html()
+    let content = $body('#bodyContent').text();
+    let years = Array(500).fill(0).map((v,i) => 1500+i);
+    let noChars = 50
+    let omg = years.filter(year => !!~content.indexOf(year))
     .reduce((acc,year) => acc.concat(getAllIndexes(content,year).map(index => ({index,year}))),[])
     .reduce((acc,obj) => {
       let item = acc.find(item => item.year === obj.year);
@@ -37,7 +36,30 @@ getBody('https://sv.wikipedia.org/wiki/Lessebo').then(body => {
     },[])
     .filter(item => item.index.length >1)
     .sort((a,b) => a.index.length<b.index.length)
-    .slice(0,3)
     .map(item => ({year:item.year, texts: item.index.map(index => content.slice(index-noChars,index+noChars))}))
-  )
-});
+    res({title, data:omg})
+  });
+})
+  
+  
+let results = [];
+let loop = () => {
+  getData().then(data => {
+    if (data.length>3 && data[0].texts.length>3) {
+      console.log( data);
+      results.push(data);
+    } else {
+      console.log('failed');
+      loop();
+    }
+  }, err => console.error(err))
+}
+
+
+
+// while(results.length<5){
+//   loop()
+// }
+
+// let get = getData
+module.exports = { getData }
