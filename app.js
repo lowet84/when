@@ -12,7 +12,7 @@ let callback = data => {
   DB.queryUnhandled().then(
     data => {
         console.log('queryREsp',data.length);
-        if(!data.length || data.length<5){
+        if(!data.length || data.length<10){
             getValidQuestion()
         } 
     },
@@ -21,7 +21,9 @@ let callback = data => {
   
 }
 let getValidQuestion = () => {
-    console.log('call')
+    console.log('call', new Date().toISOString().split('T')[1])
     CreateQuestion.getData().then(callback)
 }
+getValidQuestion();
+getValidQuestion();
 getValidQuestion();
