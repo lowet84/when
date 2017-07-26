@@ -8,7 +8,6 @@ const unhandledSchema = mongoose.Schema({
 
 const unhandledModel = mongoose.model('unhandled', unhandledSchema);
 
-
 mongoose.connect('mongodb://taco:tacos123@ds159112.mlab.com:59112/when');
 const db = mongoose.connection;
 
