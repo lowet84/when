@@ -1,42 +1,28 @@
+'use strict'
+
 const Hapi = require('hapi')
-// let CreateQuestion = require('./createQuestion')
-// let DB = require('./db');
+const GetYearFromWiki = require('./getYearFromWiki')
+const DB = require('./db');
+
+let routes = [{
+  method: 'GET',
+  path: '/api/wiki/{year}',
+  handler: function(request, reply) {
+    reply(GetYearFromWiki(request.params.year))
+  }
+}, {
+  path: '/api/{path}',
+  method: '*',
+  handler: (req, rep) => {
+    rep(DB[req.method + 'Generic'](req.params.path, req.payload))
+  }
+}];
 
 const server = new Hapi.Server();
-server.connection({ port: 3000, host: 'localhost' });
-
-server.start((err) => {
-  console.log(`Server running at: ${server.info.uri}`);
-});
-server.register(require('inert'), (err) => {
-  if (err) {
-    throw err;
-  }
-  server.route({
-    method: 'GET',
-    path: '/unhandled',
-    handler: function (request, reply) {
-      reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
-    }
-  });
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-      reply.file('./frontend/dist/*');
-    }
-  });
-});
-
-
-
-
-let getValidQuestion = async () => {
-  let data = await CreateQuestion.getData();
-  if (data.data.length > 5 && data.data[0].texts.length > 5) {
-    getValidQuestion()
-  }
-}
-
-// let storeUnhandledQuestion = DB.addUnhandled;
-
+server.connection({
+  port: process.env.PORT,
+  address: process.env.IP,
+  host: 'localhost'
+})
+server.start(() => console.log(`Server running at: ${server.info.uri}`))
+server.register(require('inert'), () => routes.forEach(route => server.route(route)));
