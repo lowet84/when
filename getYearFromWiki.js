@@ -17,5 +17,4 @@ let getData = page => new Promise(function(res) {
     });
 })
 
-
 module.exports = getData;

@@ -11,10 +11,10 @@ let routes = [{
     reply(GetYearFromWiki(request.params.year))
   }
 }, {
-  path: '/api/{path}',
+  path: '/api/{path}/{query?}',
   method: '*',
   handler: (req, rep) => {
-    rep(DB[req.method + 'Generic'](req.params.path, req.payload))
+    rep(DB[req.method + 'Generic'](req.params.path, req.params.query, req.payload))
   }
 }];
 
