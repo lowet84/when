@@ -4,7 +4,8 @@
   "description": "Före eller efter",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm install",
+    "poststart": "node app.js"
   },
   "repository": {
     "type": "git",

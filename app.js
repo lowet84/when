@@ -6,8 +6,16 @@ const DB = require('./db');
 
 let routes = [{
   method: 'GET',
+  path: '/{param*}',
+  handler: {
+    directory: {
+      path: 'frontend/dist'
+    }
+  }
+}, {
+  method: 'GET',
   path: '/api/wiki/{year}',
-  handler: function(request, reply) {
+  handler: function (request, reply) {
     reply(GetYearFromWiki(request.params.year))
   }
 }, {
