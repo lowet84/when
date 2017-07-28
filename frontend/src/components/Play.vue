@@ -1,0 +1,89 @@
+<template>
+  <div class="board" v-if="playround.active" :class="playround.failed?'failed':''">
+    <div class="question">
+      <template v-if="playround.failed">
+        <p>Där blev det tokigt :( </p>
+        <p>Ditt resultat: {{playround.answeredQuestions.length - 1}}</p>
+        <p>Ditt highScore: {{highScore}}</p> 
+        <button @click="startNewRound">Spela igen</button>
+      </template>
+      <template v-if="!playround.failed">
+        <h3>Nästa fråga:</h3>
+        <p>{{playround.shuffledQuestions[0].question}}</p>
+      </template>
+  
+    </div>
+    <h3>Placera in de här:</h3>
+    <ul>
+      <li>
+        <button @click="click(0)">Här</button>
+      </li>
+      <template v-for="(answered,index) in playround.answeredQuestions">
+        <li :key="answered.question">
+          {{answered.year}} - {{answered.question}}
+        </li>
+        <li :key="answered.question">
+          <button @click="click(index+1)">Här</button>
+        </li>
+      </template>
+    </ul>
+  </div>
+</template>
+
+<script>
+import store from '../store'; // eslint-disable-line no-unused-vars
+import types from '../types';
+import { mapState, mapGetters } from 'vuex'
+
+export default {
+  name: 'play',
+  data() {
+    return {
+      year: '2016'
+    }
+  },
+  computed: {
+    ...mapState([
+      'playround',
+      'highScore'
+    ]),
+    ...mapGetters([
+      'activeWikiQuestion'
+    ])
+  },
+  methods: {
+    getUnhandledQuestions() {
+      store.dispatch(types.actions.getUnhandledQuestions);
+    },
+    getWikiQuestions() {
+      store.dispatch(types.actions.getWikiQuestions, this.year);
+    },
+    ignoreWikiQuestion(item) {
+      store.dispatch('addIgnoredWikiQuestion', item);
+    },
+    click(index) {
+      store.commit('guessPlayround', index);
+    },
+    startNewRound() {
+      store.dispatch('getPlayround')
+    }
+  },
+  beforeMount: function () {
+    if (!store.playround || !store.playround.active) {
+      this.startNewRound();
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 0 10px;
+}
+</style>
