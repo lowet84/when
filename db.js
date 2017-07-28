@@ -32,6 +32,7 @@ db.once('open', function() {
 });
 
 let getGeneric = (schema, query) => new Promise((res, rej) => {
+    console.log('getGeneric', schema);
     const model = mongoose.model(schema, schemas[schema])
     model.find(querystring.parse(query) || {}, (err, data) => {
         err && rej(err) || res(data);

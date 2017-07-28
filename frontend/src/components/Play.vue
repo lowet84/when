@@ -10,20 +10,22 @@
       <template v-if="!playround.failed">
         <h3>Nästa fråga:</h3>
         <p>{{playround.shuffledQuestions[0].question}}</p>
+        <p>Din nuvarande poäng: {{playround.answeredQuestions.length}}
       </template>
   
     </div>
     <h3>Placera in de här:</h3>
     <ul>
       <li>
-        <button @click="click(0)">Här</button>
+        <button @click="click(0)">Innan</button>
       </li>
       <template v-for="(answered,index) in playround.answeredQuestions">
         <li :key="answered.question">
           {{answered.year}} - {{answered.question}}
         </li>
         <li :key="answered.question">
-          <button @click="click(index+1)">Här</button>
+          <button @click="click(index+1)">{{playround.answeredQuestions.length===index:'Mellan':'Efter'}}</button>
+          
         </li>
       </template>
     </ul>

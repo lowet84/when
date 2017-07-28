@@ -6,16 +6,8 @@ const DB = require('./db');
 
 let routes = [{
   method: 'GET',
-  path: '/{param*}',
-  handler: {
-    directory: {
-      path: 'frontend/dist'
-    }
-  }
-}, {
-  method: 'GET',
   path: '/api/wiki/{year}',
-  handler: function (request, reply) {
+  handler: function(request, reply) {
     reply(GetYearFromWiki(request.params.year))
   }
 }, {
@@ -23,6 +15,20 @@ let routes = [{
   method: '*',
   handler: (req, rep) => {
     rep(DB[req.method + 'Generic'](req.params.path, req.params.query, req.payload))
+  }
+}, {
+  method: 'GET',
+  path: '/static/{param*}',
+  handler: {
+    directory: {
+      path: 'frontend/dist/static'
+    }
+  }
+}, {
+  method: 'GET',
+  path: '/',
+  handler: function(request, reply) {
+    reply.file('frontend/dist/index.html')
   }
 }];
 
