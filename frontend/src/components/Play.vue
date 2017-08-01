@@ -24,8 +24,7 @@
           {{answered.year}} - {{answered.question}}
         </li>
         <li :key="answered.question">
-          <button @click="click(index+1)">{{playround.answeredQuestions.length===index:'Mellan':'Efter'}}</button>
-          
+          <button @click="click(index+1)">{{playround.answeredQuestions.length-1===index?'Efter':'Mellan'}}</button>
         </li>
       </template>
     </ul>
