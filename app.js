@@ -33,10 +33,12 @@ let routes = [{
 }];
 
 const server = new Hapi.Server();
-server.connection({
+let connectionConfig = {
   port: process.env.PORT,
-  address: process.env.IP,
-  host: 'localhost'
-})
+}
+if (process.env.IP) {
+  connectionConfig.address = process.env.IP;
+}
+server.connection(connectionConfig)
 server.start(() => console.log(`Server running at: ${server.info.uri}`))
 server.register(require('inert'), () => routes.forEach(route => server.route(route)));
