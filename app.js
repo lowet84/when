@@ -32,6 +32,7 @@ let routes = [{
   }
 }];
 
+console.log(process.env.PORT)
 const server = new Hapi.Server();
 let connectionConfig = {
   port: process.env.PORT,

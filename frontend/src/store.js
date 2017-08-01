@@ -42,24 +42,29 @@ const store = new Vuex.Store({
         shuffledQuestions,
         answeredQuestions,
         active: true,
-        failed: false
+        life: 3
       }
     },
     guessPlayround(state, index) {
       state.playround.answeredQuestions.splice(index, 0, state.playround.shuffledQuestions[0]);
+      state.playround.shuffledQuestions.splice(0, 1);
       let correct = true;
       let lastYear;
       state.playround.answeredQuestions.forEach(answeredQuestion => {
         if (lastYear > answeredQuestion.year) {
           correct = false;
         }
-        lastYear = answeredQuestion.year
+        lastYear = answeredQuestion.year;
       })
       if (correct) {
-        state.playround.shuffledQuestions.splice(0, 1);
+        
       } else {
-        state.playround.failed = true;
+        state.playround.answeredQuestions.sort((a,b)=>a.year>b.year)
+        state.playround.life--;
+      }
+      if(state.playround.life === 0 ){
         state.highScore = Math.max(state.highScore, state.playround.answeredQuestions.length - 1)
+
       }
     }
   },

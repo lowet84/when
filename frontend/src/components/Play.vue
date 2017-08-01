@@ -1,16 +1,17 @@
 <template>
   <div class="board" v-if="playround.active" :class="playround.failed?'failed':''">
     <div class="question">
-      <template v-if="playround.failed">
+      <template v-if="!playround.life">
         <p>Där blev det tokigt :( </p>
         <p>Ditt resultat: {{playround.answeredQuestions.length - 1}}</p>
         <p>Ditt highScore: {{highScore}}</p> 
         <button @click="startNewRound">Spela igen</button>
       </template>
-      <template v-if="!playround.failed">
+      <template v-if="playround.life">
         <h3>Nästa fråga:</h3>
         <p>{{playround.shuffledQuestions[0].question}}</p>
-        <p>Din nuvarande poäng: {{playround.answeredQuestions.length}}
+        <p>Din nuvarande poäng: {{playround.answeredQuestions.length}}</p>
+        <p>Dina liv {{playround.life}}</p>
       </template>
   
     </div>

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm install",
-    "poststart": "node app.js"
+    "poststart": "node app.js",
+    "local": "set PORT=8080 && node app.js"
   },
   "repository": {
     "type": "git",
