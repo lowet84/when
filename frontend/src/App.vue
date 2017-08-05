@@ -11,13 +11,19 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 body {
   margin: 0;
 }
-.flex{
+
+* {
+  box-sizing: border-box;
+}
+
+.flex {
   display: flex;
 }
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -41,13 +47,6 @@ button {
   /* for button */
   -moz-user-select: none;
   -ms-user-select: none;
-
-  &::-moz-focus-inner,
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-  }
-
   color: inherit;
   cursor: default;
   display: inline-block;
@@ -57,6 +56,11 @@ button {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-}
 
+  &::-moz-focus-inner,
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+}
 </style>

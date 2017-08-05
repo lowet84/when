@@ -9,28 +9,32 @@
       </template>
       <template v-if="playround.life">
         <div class="flex">
-          <p>{{playround.shuffledQuestions[0].question}}</p>
-          <div class="">
-            <div class="icon score">
-              <span>{{playround.answeredQuestions.length}}</span>
-            </div>
-            <div class="icon heart">
-              <img src="static/heart.svg" />
-              <span>{{playround.life}}</span>
-            </div>
+          <!-- <transition name="answer" mode="out-in"> -->
+            <div>{{playround.shuffledQuestions[0].question}}</div>
+          <!-- </transition> -->
+          <div class="icon score">
+            <div class="icon__border"></div>
+            <span>{{playround.answeredQuestions.length}}</span>
+          </div>
+          <div class="icon heart">
+            <img src="static/heart.svg" />
+            <span>{{playround.life}}</span>
           </div>
         </div>
       </template>
   
     </div>
     <div class="answered">
-      <button @click="click(0)">Innan</button>
-      <template v-for="(answered,index) in playround.answeredQuestions">
-        <div class="answered__item" :key="answered.question">
-          {{answered.year}} - {{answered.question}}
-        </div>
-        <button :key="answered.question" @click="click(index+1)">{{playround.answeredQuestions.length-1===index?'Efter':'Mellan'}}</button>
-      </template>
+      <transition-group name="answers" tag="div">
+        <template v-for="(answered,index) in playround.answeredQuestions">
+          <button v-if="!isSameYearAsLast(playround.answeredQuestions,index)" :key="answered.question" @click="click(index)">{{index===0?'Innan':'Mellan'}}</button>
+          <div class="answered__item" :key="answered.question">
+            <h3 v-if="!isSameYearAsLast(playround.answeredQuestions,index)">{{answered.year}}</h3>
+            {{answered.question}}
+          </div>
+        </template>
+      </transition-group>
+      <button @click="click(playround.answeredQuestions.length)">Efter</button>
     </div>
   </div>
 </template>
@@ -48,6 +52,7 @@ export default {
     }
   },
   computed: {
+
     ...mapState([
       'playround',
       'highScore'
@@ -57,6 +62,9 @@ export default {
     ])
   },
   methods: {
+    isSameYearAsLast(list, index) {
+      return list[index - 1] && list[index - 1].year === list[index].year
+    },
     getUnhandledQuestions() {
       store.dispatch(types.actions.getUnhandledQuestions);
     },
@@ -89,56 +97,71 @@ export default {
   height: 100vh;
 }
 
+$_question-padding: .5em;
 .question {
   box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
-  flex-shrink: 0
+  padding: $_question-padding;
+  flex-shrink: 0;
+  .icon {
+    position: relative;
+    margin-left: $_question-padding;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+
+    &__border {
+      border: 0.25rem solid #ccc;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    span {
+      position: absolute;
+      top: 0.2em;
+      font-size: 1.5rem;
+      left: 0;
+      right: 0;
+    }
+
+    &.heart span {
+      color: white;
+    }
+    &.score {}
+  }
 }
 
 .answered {
   flex-grow: 1;
-  padding-top: 2rem;
-  background-color: rgba(0, 255, 255, 0.3);
+  overflow: auto;
+  padding-top: 2rem; // background-color: rgba(0, 255, 255, 0.3);
   &__item {
     font-size: 1rem;
     margin: 0.5em;
   }
+  h3 {
+    margin: 1em 0 0.5em 0
+  }
 }
 
 button {
-  border: 1px solid #ccc;
-  padding: 1em;
-  background-color: #eee
+  border: 1px solid #eee;
+  padding: 0.5em 1em;
+  color: white;
+  background-color: #2490dc
 }
 
-.icon {
-  position: relative;
-  margin-left: 1rem;
-  width: 3rem;
-  height: 3rem;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
+.answers {
+  &-enter-active,
+  &-leave-active {
+    transition: all 1s;
   }
-
-  span {
-    position: absolute;
-    top: 0.2em;
-    font-size: 1.5rem;
-    left: 0;
-    right: 0;
+  &-enter {
+    opacity: 0
   }
-
-  &.heart span {
-    color: white;
-  }
-}
-
-.score {
-  border: 0.25rem solid #ccc;
-  border-radius: 50%;
-  width: 2.4rem;
-  height: 2.4rem;
 }
 </style>
