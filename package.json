@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm install",
     "poststart": "node app.js",
-    "local": "set PORT=8080 && node app.js"
+    "local": "set PORT=8081 && node app.js"
   },
   "repository": {
     "type": "git",

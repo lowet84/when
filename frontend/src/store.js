@@ -57,14 +57,13 @@ const store = new Vuex.Store({
         lastYear = answeredQuestion.year;
       })
       if (correct) {
-        
+
       } else {
-        state.playround.answeredQuestions.sort((a,b)=>a.year>b.year)
+        state.playround.answeredQuestions.sort((a, b) => a.year > b.year)
         state.playround.life--;
       }
-      if(state.playround.life === 0 ){
+      if (state.playround.life === 0) {
         state.highScore = Math.max(state.highScore, state.playround.answeredQuestions.length - 1)
-
       }
     }
   },
