@@ -1,0 +1,8 @@
+FROM microsoft/aspnetcore-build:2.0.0
+
+RUN mkdir -p /out
+ADD /when.ApiServer /app
+WORKDIR /app/
+
+RUN dotnet restore && \
+    dotnet publish --output /out/ --configuration Release
