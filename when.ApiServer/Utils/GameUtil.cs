@@ -21,7 +21,10 @@ namespace when.ApiServer.Utils
         public static void Scrub(this StandardGame standardGame)
         {
             var question = standardGame.CurrentQuestion;
-            ForceSetValue(question, "Year", -1);
+            if (question != null)
+            {
+                ForceSetValue(question, "Year", -1);
+            }
         }
 
         private static void ForceSetValue(object item, string propertyName, object value)
