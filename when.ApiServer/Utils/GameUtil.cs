@@ -63,7 +63,8 @@ namespace when.ApiServer.Utils
             questions = questions.OrderByDescending(d => d.Year).ToList();
 
             var nextQuestion = lives > 0 ? questions.Next() : null;
-            var newGame = new StandardGame(nextQuestion, questions.ToArray(), lives);
+            
+            var newGame = new StandardGame(nextQuestion, questions.ToArray(), lives, game.User);
 
             return (newGame, success);
         }

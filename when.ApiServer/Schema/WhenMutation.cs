@@ -47,7 +47,9 @@ namespace when.ApiServer.Schema
                 }
             }
 
-            var game = new StandardGame(firstQuestion, new[] { seed }, 3);
+            var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
+            if (user == null) return null;
+            var game = new StandardGame(firstQuestion, new[] { seed }, 3, user);
             context.AddDefault(game);
 
             game.Scrub();
@@ -56,9 +58,12 @@ namespace when.ApiServer.Schema
 
         public StandardGameResult AnswerStandard(UserContext context, Id gameId, int index)
         {
-            var tempContext = new UserContext("query{dummy{lives id completedQuestions{id year text} currentQuestion{id year text}}}");
+            context.Authorize();
+            var tempContext = new UserContext("query{dummy{user{id} lives id completedQuestions{id year text} currentQuestion{id year text}}}");
             var game = tempContext.Get<StandardGame>(gameId);
             if (game == null) return null;
+            var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
+            if (user?.Id != game.User.Id) return null;
 
             var evaluated = game.EvaluateStandardGame(index);
             context.UpdateDefault(evaluated.Item1, game.Id);

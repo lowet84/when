@@ -12,12 +12,14 @@ namespace when.ApiServer.Model
         public Question CurrentQuestion { get; }
         public Question[] CompletedQuestions { get; }
         public int Lives { get; }
+        public User User { get; }
 
-        public StandardGame(Question currentQuestion, Question[] completedQuestions, int lives)
+        public StandardGame(Question currentQuestion, Question[] completedQuestions, int lives, User user)
         {
             CurrentQuestion = currentQuestion;
             CompletedQuestions = completedQuestions;
             Lives = lives;
+            User = user;
         }
     }
 }

@@ -18,18 +18,20 @@ namespace when.ApiServer.Schema
 
         public StandardGame[] StandardGamesOngoing(UserContext context)
         {
+            var id = context.GetCurrentUser(UserContext.ReadType.Shallow).Id.ToString();
             var games = context.Search<StandardGame>(
                 expr => expr.Filter(
-                    game => game.G("CurrentQuestion").Ne(null)), UserContext.ReadType.WithDocument);
+                    game => game.G("CurrentQuestion").Ne(null).And(game.G("User").Eq(id))), UserContext.ReadType.WithDocument);
             games.ToList().ForEach(d=>d.Scrub());
             return games;
         }
 
         public StandardGame[] StandardGamesFinished(UserContext context)
         {
+            var id = context.GetCurrentUser(UserContext.ReadType.Shallow).Id.ToString();
             var games = context.Search<StandardGame>(
                 expr => expr.Filter(
-                    game => game.G("CurrentQuestion").Eq(null)), UserContext.ReadType.WithDocument);
+                    game => game.G("CurrentQuestion").Eq(null).And(game.G("User").Eq(id))), UserContext.ReadType.WithDocument);
             return games;
         }
     }

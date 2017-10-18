@@ -11,7 +11,9 @@ namespace when.ApiServer.Utils
     {
         public static User GetCurrentUser(this UserContext context, UserContext.ReadType readType)
         {
-            return context.Search<User>(expr => expr.Filter(u => u.G("UserId").Eq(context.UserName)), readType).SingleOrDefault();
+            return context
+                .Search<User>(expr => expr.Filter(u => u.G("UserId").Eq(context.UserName)), readType)
+                .SingleOrDefault();
         }
     }
 }
