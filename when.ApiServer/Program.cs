@@ -35,6 +35,7 @@ namespace when.ApiServer
             var context = new UserContext();
             var existing = context.GetAll<Question>(UserContext.ReadType.Shallow);
             var parallel = 10;
+            var samplesPerYear = 10;
             if (existing.Length == 0)
             {
                 var questions = new List<Question>();
@@ -42,7 +43,7 @@ namespace when.ApiServer
                 while (years.Count > 0)
                 {
                     var current = years.Take(parallel).ToList();
-                    var tasks = current.Select(d => new Task<List<Question>>(() => GetQuestions(d))).ToList();
+                    var tasks = current.Select(d => new Task<List<Question>>(() => GetQuestions(d, samplesPerYear))).ToList();
                     tasks.ForEach(d => d.Start());
                     Task.WaitAll(tasks.ToArray());
                     var results = tasks.Select(d => d.Result).SelectMany(d => d).ToList();
@@ -53,14 +54,15 @@ namespace when.ApiServer
                 {
                     var question = questions[index];
                     context.AddDefault(question);
-                    Console.WriteLine($"{index+1}/{questions.Count}");
+                    Console.WriteLine($"{index + 1}/{questions.Count}");
                 }
             }
         }
 
-        public static List<Question> GetQuestions(int year)
+        public static List<Question> GetQuestions(int year, int samples)
         {
             var ret = new List<Question>();
+            var random = new Random();
             using (var client = new HttpClient())
             {
                 var context = new UserContext();
@@ -76,7 +78,7 @@ namespace when.ApiServer
                         d.Attributes["class"].Value.Contains("event-list__item")
                     ).Select(d => d.LastChild.InnerText).ToList();
 
-                foreach (var text in texts)
+                foreach (var text in texts.OrderBy(x => random.Next()).Take(samples))
                 {
                     var question = new Question(text, year);
                     ret.Add(question);
