@@ -20,7 +20,7 @@ let init = async function () {
   if (data.loginState === 'NOT_LOGGED_IN') {
     login()
   } else if (data.loginState === 'NO_USERNAME') {
-    console.log('no username')
+    window.location.href = '/#/username'
   }
 
   if (data.user !== null) {

@@ -10,14 +10,14 @@ namespace when.ApiServer.Utils
 {
     public static class AuthUtil
     {
-        public static User Authorize(this UserContext context)
+        public static User Authorize(this UserContext context, AuthMode authMode = AuthMode.UserInDb)
         {
             if (context.UserName == null)
             {
                 throw new AuthenticationException("Not authorized");
             }
             var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
-            if (user == null)
+            if (user == null && authMode == AuthMode.UserInDb)
             {
                 throw new AuthenticationException("No username set");
             }
@@ -31,5 +31,11 @@ namespace when.ApiServer.Utils
                 .Search<User>(expr => expr.Filter(u => u.G("UserId").Eq(context.UserName)), readType)
                 .SingleOrDefault();
         }
+    }
+
+    public enum AuthMode
+    {
+        UserInDb,
+        UserId
     }
 }

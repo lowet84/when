@@ -2,12 +2,14 @@
   <div class="hello">
     <div>Set username</div>
     <div>
-      <input v-model="$store.state.username" placeholder="edit me">
+      <input v-model="$store.state.username" placeholder="enter a username">
     </div>
+    <button @click="save">Save</button>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: 'ChangeUsername',
   data () {
@@ -17,6 +19,13 @@ export default {
     book: function () {
       return this.$store.state.editingBook
     }
+  },
+  methods: {
+    async save () {
+      await this.saveUsername()
+      this.$router.push('/')
+    },
+    ...mapMutations(['saveUsername'])
   }
 }
 </script>

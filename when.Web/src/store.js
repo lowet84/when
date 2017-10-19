@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Api from './api'
 
 Vue.use(Vuex)
 
@@ -8,14 +9,15 @@ const state = {
 }
 
 const mutations = {
+  async saveUsername (state) {
+    await Api('setUsername', { username: state.username })
+  }
 }
 
-const actions = {
-}
+const actions = {}
 
 // getters are functions
-const getters = {
-}
+const getters = {}
 
 export default new Vuex.Store({
   state,

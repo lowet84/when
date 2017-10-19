@@ -14,7 +14,7 @@ namespace when.ApiServer.Schema
     {
         public DefaultResult<User> SetUserName(UserContext context, string userName)
         {
-            var existingUser = context.Authorize();
+            var existingUser = context.Authorize(AuthMode.UserId);
             User newUser;
 
             if (existingUser == null)
