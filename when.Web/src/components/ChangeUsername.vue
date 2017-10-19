@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div>
     <div>Set username</div>
     <div>
       <input v-model="$store.state.username" placeholder="enter a username">
@@ -12,9 +12,6 @@
 import { mapMutations } from 'vuex'
 export default {
   name: 'ChangeUsername',
-  data () {
-    return {}
-  },
   computed: {
     book: function () {
       return this.$store.state.editingBook

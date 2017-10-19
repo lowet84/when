@@ -1,13 +1,25 @@
-import user from './user'
-import loginState from './loginState'
-import loginOptions from './loginOptions'
-import setUsername from './setUsername'
+import { getUser, setUsername } from './user'
+import { state as loginState, options as loginOptions } from './login'
+import { ongoing, newGame } from './games'
 
 export default async function (query, args) {
   switch (query) {
-    case 'user': return user()
-    case 'loginState' : return loginState()
-    case 'loginOptions' : return loginOptions()
-    case 'setUsername' : return setUsername(args.username)
+    // User
+    case 'user':
+      return getUser()
+    case 'setUsername':
+      return setUsername(args.username)
+
+    // Login
+    case 'loginState':
+      return loginState()
+    case 'loginOptions':
+      return loginOptions()
+
+    // Games
+    case 'ongoingGames':
+      return ongoing()
+    case 'startNewGame':
+      return newGame()
   }
 }

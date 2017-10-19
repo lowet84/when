@@ -1,4 +1,12 @@
-export default async function () {
+let state = async function () {
+  return `
+    query{
+      loginState
+    }
+  `
+}
+
+let options = async function () {
   return `
   query{
     loginOptions{
@@ -12,3 +20,5 @@ export default async function () {
   }
   `
 }
+
+export { state, options }

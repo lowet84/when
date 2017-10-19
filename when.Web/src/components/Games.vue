@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <div>
+      <div v-for="game in games" :key="game.id">
+        <button @click="play(game.id)">
+          <span v-for="year in game.years" :key="year">[{{year}}]</span>
+          <span v-for="lives in game.lives" :key="lives">&lt;3</span>
+        </button>
+      </div>
+      <button @click="newGame">New game</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+export default {
+  name: 'Games',
+  methods: {
+    ...mapActions(['startNewGame', 'updateOngoingGames']),
+    async newGame () {
+      await this.startNewGame()
+    },
+    getGameView (game) {
+      var ret = {
+        id: game.id,
+        lives: game.lives,
+        years: game.completedQuestions.map(d => d.year).sort()
+      }
+      return ret
+    },
+    play (id) {
+      console.log(id)
+    }
+  },
+  created () {
+    this.updateOngoingGames()
+  },
+  computed: {
+    games: function () {
+      var games = this.$store.state.ongoingGames
+      var mapped = games.map(d => this.getGameView(d))
+      console.log(games)
+      return mapped
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>

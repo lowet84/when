@@ -5,7 +5,8 @@ import Api from './api'
 Vue.use(Vuex)
 
 const state = {
-  username: null
+  username: null,
+  ongoingGames: []
 }
 
 const mutations = {
@@ -14,10 +15,21 @@ const mutations = {
   }
 }
 
-const actions = {}
+const actions = {
+  async startNewGame () {
+    var newGame = await Api('startNewGame')
+    console.log(newGame)
+  },
+  async updateOngoingGames () {
+    var games = await Api('ongoingGames')
+    Vue.set(state, 'ongoingGames', games.standardGamesOngoing)
+  }
+}
 
 // getters are functions
-const getters = {}
+const getters = {
+
+}
 
 export default new Vuex.Store({
   state,
