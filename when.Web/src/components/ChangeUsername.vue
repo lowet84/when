@@ -10,11 +10,11 @@
 <script>
 export default {
   name: 'ChangeUsername',
-  data() {
+  data () {
     return {}
   },
   computed: {
-    book: function() {
+    book: function () {
       return this.$store.state.editingBook
     }
   }
