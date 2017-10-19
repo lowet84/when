@@ -14,8 +14,7 @@ namespace when.ApiServer.Schema
     {
         public DefaultResult<User> SetUserName(UserContext context, string userName)
         {
-            context.Authorize();
-            var existingUser = context.GetCurrentUser(UserContext.ReadType.Shallow);
+            var existingUser = context.Authorize();
             User newUser;
 
             if (existingUser == null)
@@ -34,7 +33,7 @@ namespace when.ApiServer.Schema
 
         public DefaultResult<StandardGame> StartNewStandardGame(UserContext context)
         {
-            context.Authorize();
+            var user = context.Authorize();
             var seed = QuestionUtil.GetRandomQuestion();
 
             Question firstQuestion;
@@ -47,8 +46,6 @@ namespace when.ApiServer.Schema
                 }
             }
 
-            var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
-            if (user == null) return null;
             var game = new StandardGame(firstQuestion, new[] { seed }, 3, user);
             context.AddDefault(game);
 
@@ -58,12 +55,10 @@ namespace when.ApiServer.Schema
 
         public StandardGameResult AnswerStandard(UserContext context, Id gameId, int index)
         {
-            context.Authorize();
+            var user = context.Authorize();
             var tempContext = new UserContext("query{dummy{user{id} lives id completedQuestions{id year text} currentQuestion{id year text}}}");
             var game = tempContext.Get<StandardGame>(gameId);
-            if (game == null) return null;
-            var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
-            if (user?.Id != game.User.Id) return null;
+            if (user?.Id != game?.User.Id) return null;
 
             var evaluated = game.EvaluateStandardGame(index);
             context.UpdateDefault(evaluated.Item1, game.Id);

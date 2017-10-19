@@ -20,7 +20,10 @@
       "environmentVariables": {
         "DATABASE": "localhost",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DEVUSER": "devuser"
+        "AUTH_AUDIENCE": "whengame",
+        "AUTH_SCOPE": "full_access",
+        "AUTH_CLIENT_ID": "j5k2buGKiIEYViefgQaBX65mB1AhR3Ua",
+        "AUTH_DOMAIN": "lowet.eu.auth0.com"
       },
       "applicationUrl": "http://localhost:58726/"
     }

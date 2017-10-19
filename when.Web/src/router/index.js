@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
-import Play from '@/components/Play'
+import HelloWorld from '@/components/HelloWorld'
+import ChangeUsername from '@/components/ChangeUsername'
 
 Vue.use(Router)
 
@@ -9,13 +9,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Play',
-      component: Play
+      name: 'Hello',
+      component: HelloWorld
     },
     {
-      path: '/admin',
-      name: 'Hello',
-      component: Hello
+      path: '/username',
+      name: 'ChangeUsername',
+      component: ChangeUsername
     }
   ]
 })

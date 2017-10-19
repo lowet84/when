@@ -10,15 +10,27 @@ namespace when.ApiServer.Schema
     [ImplementViewer(OperationType.Query)]
     public class WhenQuery
     {
+        public LoginStates LoginState(UserContext context)
+        {
+            if (context.UserName == null)
+                return LoginStates.NotLoggedIn;
+            var user = context.GetCurrentUser(UserContext.ReadType.Shallow);
+            return user == null ? LoginStates.NoUsername : LoginStates.LoggedIn;
+        }
+
+        public Login LoginOptions(UserContext context)
+        {
+            return new Login();
+        }
+
         public User User(UserContext context)
         {
-            context.Authorize();
-            return context.GetCurrentUser(UserContext.ReadType.WithDocument);
+            return context.Authorize();
         }
 
         public StandardGame[] StandardGamesOngoing(UserContext context)
         {
-            var id = context.GetCurrentUser(UserContext.ReadType.Shallow).Id.ToString();
+            var id = context.Authorize().Id.ToString();
             var games = context.Search<StandardGame>(
                 expr => expr.Filter(
                     game => game.G("CurrentQuestion").Ne(null).And(game.G("User").Eq(id))), UserContext.ReadType.WithDocument);
@@ -28,11 +40,18 @@ namespace when.ApiServer.Schema
 
         public StandardGame[] StandardGamesFinished(UserContext context)
         {
-            var id = context.GetCurrentUser(UserContext.ReadType.Shallow).Id.ToString();
+            var id = context.Authorize().Id.ToString();
             var games = context.Search<StandardGame>(
                 expr => expr.Filter(
                     game => game.G("CurrentQuestion").Eq(null).And(game.G("User").Eq(id))), UserContext.ReadType.WithDocument);
             return games;
         }
+    }
+
+    public enum LoginStates
+    {
+        NotLoggedIn,
+        NoUsername,
+        LoggedIn
     }
 }
