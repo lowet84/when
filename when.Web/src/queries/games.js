@@ -24,4 +24,53 @@ let newGame = async function () {
   `
 }
 
-export { ongoing, newGame }
+let current = async function (id) {
+  return `
+    query{
+      standardGame(id:"${id}"){
+        completedQuestions{
+          text year
+        }
+        currentQuestion{
+          text
+        }
+        id
+        lives
+      }
+    }
+  `
+}
+
+let answer = async function (id, index) {
+  return `
+    mutation{
+      answerStandard(gameId:"${id}" index:${index}){
+        success
+        result{
+          completedQuestions
+          {
+            text
+            year
+          }
+          currentQuestion{
+            text
+          }
+          lives
+          id
+        }
+      }
+    }
+  `
+}
+
+let removeAll = async function () {
+  return `
+    mutation{
+      removeAllStandardGames{
+        result
+      }
+    }
+  `
+}
+
+export { ongoing, newGame, current, removeAll, answer }

@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const state = {
   username: null,
-  ongoingGames: []
+  ongoingGames: [],
+  currentGame: null
 }
 
 const mutations = {
@@ -16,20 +17,40 @@ const mutations = {
 }
 
 const actions = {
-  async startNewGame () {
+  async startNewGame (store) {
     var newGame = await Api('startNewGame')
-    console.log(newGame)
+    let id = newGame.startNewStandardGame.result.id
+    await updateOngoingGames()
+    await setCurrentGame(id)
   },
   async updateOngoingGames () {
-    var games = await Api('ongoingGames')
-    Vue.set(state, 'ongoingGames', games.standardGamesOngoing)
+    await updateOngoingGames()
+  },
+  async setCurrentGame (store, id) {
+    await setCurrentGame(id)
+  },
+  async removeAllStandardGames () {
+    await Api('removeAllStandardGames')
+    await updateOngoingGames()
+  },
+  async answerStandard (store, index) {
+    let data = await Api('answerStandard', { id: state.currentGame.id, index: index })
+    Vue.set(state, 'currentGame', data.answerStandard.result)
   }
 }
 
-// getters are functions
-const getters = {
-
+let updateOngoingGames = async function () {
+  var games = await Api('ongoingGames')
+  Vue.set(state, 'ongoingGames', games.standardGamesOngoing)
 }
+
+let setCurrentGame = async function (id) {
+  let data = await Api('currentGame', { id: id })
+  Vue.set(state, 'currentGame', data.standardGame)
+}
+
+// getters are functions
+const getters = {}
 
 export default new Vuex.Store({
   state,

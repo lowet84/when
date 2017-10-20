@@ -4,10 +4,11 @@
       <div v-for="game in games" :key="game.id">
         <button @click="play(game.id)">
           <span v-for="year in game.years" :key="year">[{{year}}]</span>
-          <span v-for="lives in game.lives" :key="lives">&lt;3</span>
+          <span v-for="lives in game.lives" :key="lives">*</span>
         </button>
       </div>
       <button @click="newGame">New game</button>
+      <button @click="clean">Remove all</button>
     </div>
   </div>
 </template>
@@ -17,9 +18,14 @@ import { mapActions } from 'vuex'
 export default {
   name: 'Games',
   methods: {
-    ...mapActions(['startNewGame', 'updateOngoingGames']),
+    ...mapActions([
+      'startNewGame',
+      'updateOngoingGames',
+      'setCurrentGame',
+      'removeAllStandardGames']),
     async newGame () {
       await this.startNewGame()
+      this.$router.push('/play')
     },
     getGameView (game) {
       var ret = {
@@ -29,8 +35,12 @@ export default {
       }
       return ret
     },
-    play (id) {
-      console.log(id)
+    async play (id) {
+      await this.setCurrentGame(id)
+      this.$router.push('/play')
+    },
+    async clean () {
+      await this.removeAllStandardGames()
     }
   },
   created () {
@@ -40,7 +50,6 @@ export default {
     games: function () {
       var games = this.$store.state.ongoingGames
       var mapped = games.map(d => this.getGameView(d))
-      console.log(games)
       return mapped
     }
   }

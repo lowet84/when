@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GraphQlRethinkDbLibrary;
+using GraphQL.Conventions;
 using GraphQL.Conventions.Relay;
 using when.ApiServer.Model;
 using when.ApiServer.Utils;
@@ -45,6 +46,16 @@ namespace when.ApiServer.Schema
                 expr => expr.Filter(
                     game => game.G("CurrentQuestion").Eq(null).And(game.G("User").Eq(id))), UserContext.ReadType.WithDocument);
             return games;
+        }
+
+        public StandardGame StandardGame(UserContext context, Id id)
+        {
+            var user = context.Authorize();
+            var game = context.Get<StandardGame>(id, UserContext.ReadType.Shallow);
+            if (game.User.Id != user.Id) return null;
+
+            var ret =  context.Get<StandardGame>(id);
+            return ret;
         }
     }
 

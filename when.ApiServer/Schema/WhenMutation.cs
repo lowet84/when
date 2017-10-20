@@ -65,5 +65,18 @@ namespace when.ApiServer.Schema
             evaluated.Item1.Scrub();
             return new StandardGameResult(evaluated.Item1, evaluated.Item2);
         }
+
+        public DefaultResult<bool> RemoveAllStandardGames(UserContext context)
+        {
+            var user = context.Authorize();
+            var games = context.Search<StandardGame>(
+                expr => expr.Filter(
+                    game => game.G("User").Eq(user.Id.ToString())), UserContext.ReadType.Shallow);
+            foreach (var standardGame in games)
+            {
+                context.Remove<StandardGame>(standardGame.Id);
+            }
+            return new DefaultResult<bool>(true);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { getUser, setUsername } from './user'
 import { state as loginState, options as loginOptions } from './login'
-import { ongoing, newGame } from './games'
+import { ongoing, newGame, current, removeAll, answer } from './games'
 
 export default async function (query, args) {
   switch (query) {
@@ -21,5 +21,11 @@ export default async function (query, args) {
       return ongoing()
     case 'startNewGame':
       return newGame()
+    case 'currentGame':
+      return current(args.id)
+    case 'removeAllStandardGames':
+      return removeAll()
+    case 'answerStandard':
+      return answer(args.id, args.index)
   }
 }
