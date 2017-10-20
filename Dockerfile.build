@@ -1,7 +1,14 @@
 FROM microsoft/aspnetcore-build:2.0.0
 
 RUN mkdir -p /out
+ADD /when.Web /web
 ADD /when.ApiServer /app
+
+WORKDIR /web
+RUN npm install
+RUN npm run build
+RUN mkdir -p /app/wwwroot
+RUN cp -r dist/* /app/wwwroot
 WORKDIR /app/
 
 RUN dotnet restore && \
