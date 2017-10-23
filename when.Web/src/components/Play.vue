@@ -3,7 +3,7 @@
     <h3>
       <span v-for="life in game.lives" :key="life">*</span>
     </h3>
-    <h4>{{game.currentQuestion.text}}</h4>
+    <h4 v-if="game.currentQuestion!=null">{{game.currentQuestion.text}}</h4>
     <div>
       <button @click="guess(0)">Guess</button>
     </div>
@@ -11,6 +11,8 @@
       <div>{{completedQuestion.year}}: {{completedQuestion.text}}</div>
       <button @click="guess(i+1)">Guess</button>
     </div>
+    </br></br>
+    <button @click="back">Back</button>
   </div>
 </template>
 
@@ -21,7 +23,13 @@ export default {
   methods: {
     ...mapActions(['answerStandard']),
     async guess (index) {
-      this.answerStandard(index)
+      await this.answerStandard(index)
+      if (this.game.lives === 0) {
+        this.$router.push('/summary')
+      }
+    },
+    back () {
+      this.$router.push('/')
     }
   },
   created () {

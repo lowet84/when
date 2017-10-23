@@ -1,15 +1,14 @@
 <template>
   <div>
-    <div>
-      <div v-for="game in games" :key="game.id">
-        <button @click="play(game.id)">
-          <span v-for="year in game.years" :key="year">[{{year}}]</span>
-          <span v-for="lives in game.lives" :key="lives">*</span>
-        </button>
-      </div>
-      <button @click="newGame">New game</button>
-      <button @click="clean">Remove all</button>
+    <h1>when</h1>
+    <div v-for="game in games" :key="game.id">
+      <button @click="play(game.id)">
+        <span v-for="year in game.years" :key="year">[{{year}}]</span>
+        <span v-for="lives in game.lives" :key="lives">*</span>
+      </button>
     </div>
+    <button @click="newGame">New game</button>
+    <button @click="clean">Remove all</button>
   </div>
 </template>
 
