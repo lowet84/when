@@ -1,0 +1,11 @@
+pipeline:
+  build:
+    image: docker
+    commands:
+      - docker run --rm alpine echo "test"
+#     - docker build --rm -t octocat/hello-world .
+#     - docker run --rm octocat/hello-world --test
+#     - docker push octocat/hello-world
+#     - docker rmi octocat/hello-world
+    volumes:
++     - /var/run/docker.sock:/var/run/docker.sock
