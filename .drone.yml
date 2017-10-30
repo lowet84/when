@@ -1,7 +1,4 @@
-pipeline:
-  build:
-    image: docker
-    commands:
-      - echo test
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
+build:
+  image: alpine
+  commands:
+    - echo "Hello world!"
