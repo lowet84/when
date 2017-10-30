@@ -1,4 +1,5 @@
-build:
-  image: alpine
-  commands:
-    - echo "Hello world!"
+pipeline:
+  backend:
+    image: alpine
+    commands:
+      - echo "Hello world!"
