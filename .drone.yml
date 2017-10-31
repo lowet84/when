@@ -2,9 +2,4 @@ pipeline:
   first:
     image: alpine
     commands:
-      - touch fil
-      - ls
-  second:
-    image: node
-    commands:
-      - ls
+      - ls /etc
