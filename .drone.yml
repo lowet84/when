@@ -15,3 +15,8 @@ pipeline:
       - mkdir -p out
       - dotnet restore
       - dotnet publish --output out/ --configuration Release
+
+  docker:
+    image: plugins/docker
+    repo: lowet84/when
+    secrets: [ docker_username, docker_password ]
