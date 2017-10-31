@@ -1,12 +1,16 @@
 pipeline:
-  build:
+  frontend:
+    image: microsoft/aspnetcore-build:2.0.0
+    commands:
+      - cd when.Web
+      - npm install
+      - npm run dev
+      - ls
+
+  backend:
     image: microsoft/aspnetcore-build:2.0.0
     commands: 
-      - mkdir -p out
-      - dotnet restore
-      - dotnet publish --output out/ --configuration Release
-  evaluate:
-    image: alpine
-    commands:
       - ls
-      - ls /etc
+#      - mkdir -p out
+#      - dotnet restore
+#      - dotnet publish --output out/ --configuration Release
