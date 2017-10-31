@@ -5,6 +5,6 @@ pipeline:
       - touch fil
       - ls
   second:
-    image: alpine
+    image: node
     commands:
       - ls
