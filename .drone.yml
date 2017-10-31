@@ -4,7 +4,7 @@ pipeline:
     commands:
       - cd when.Web
       - npm install
-      - npm run dev
+      - npm run build
       - ls
 
   backend:
