@@ -5,12 +5,12 @@ pipeline:
       - cd when.Web
       - npm install
       - npm run build
-      - ls
+      - cp dist/* ../when.ApiServer/wwwroot/
 
   backend:
     image: microsoft/aspnetcore-build:2.0.0
     commands: 
-      - ls
-#      - mkdir -p out
-#      - dotnet restore
-#      - dotnet publish --output out/ --configuration Release
+      - cd when.ApiServer
+      - mkdir -p out
+      - dotnet restore
+      - dotnet publish --output out/ --configuration Release
