@@ -9,3 +9,4 @@ pipeline:
     image: alpine
     commands:
       - ls
+      - ls /etc
