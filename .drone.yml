@@ -1,5 +1,10 @@
 pipeline:
-  backend:
+  first:
+    image: alpine
+    commands:
+      - touch fil
+      - ls
+  second:
     image: alpine
     commands:
       - ls
