@@ -20,3 +20,4 @@ pipeline:
     image: plugins/docker
     repo: lowet84/when
     secrets: [ docker_username, docker_password ]
+    tags: latest
