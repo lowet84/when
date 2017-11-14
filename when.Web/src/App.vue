@@ -60,11 +60,14 @@ button {
 .btn--small {
   padding: 0.5em;
 }
-.btn--cta{
-  background-color: #2196F3;
+.btn--cta {
+  background-color: #2196f3;
 }
 body {
   padding: 0;
   margin: 0;
+}
+* {
+  box-sizing: border-box;
 }
 </style>
