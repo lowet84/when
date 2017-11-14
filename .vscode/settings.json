@@ -1,10 +1,13 @@
 {
-    "eslint.validate": ["javascript", "html", "vue"],
-    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-    "editor.tabSize": 2,
-    "workbench.iconTheme": "vscode-icons",
-    "git.confirmSync": false,
-    "git.enableSmartCommit": true,
-    "prettier.semi": false,
-    "vetur.format.defaultFormatter.js": "vscode-typescript"
+  "eslint.validate": ["javascript", "html", "vue"],
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "editor.tabSize": 2,
+  "workbench.iconTheme": "vscode-icons",
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "prettier.semi": false,
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatter.ts": "vscode-typescript",
+  "prettier.javascriptEnable": []
 }
