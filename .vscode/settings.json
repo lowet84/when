@@ -1,0 +1,10 @@
+{
+    "eslint.validate": ["javascript", "html", "vue"],
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "editor.tabSize": 2,
+    "workbench.iconTheme": "vscode-icons",
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "prettier.semi": false,
+    "vetur.format.defaultFormatter.js": "vscode-typescript"
+}
