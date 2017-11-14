@@ -24,3 +24,13 @@ pipeline:
     tags: latest
     when:
       branch: master
+
+  deploy:
+    image: appleboy/drone-ssh
+    host: home.local
+    username: root
+    secrets: [ ssh_key ]
+    port: 22
+    script:
+      - cd homeserver2/when
+      - upgrade-compose
