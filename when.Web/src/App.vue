@@ -11,5 +11,60 @@ export default {
 </script>
 
 <style>
+body {
+  height: 1vh;
+  background-color: #fff;
+}
 
+/* 89ffcc */
+
+[role="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* Reset `button` and button-style `input` default styles */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+  background: none;
+  border: 0;
+  color: inherit;
+  /* cursor: default; */
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  padding: 0;
+  -webkit-appearance: button; /* for input */
+  -webkit-user-select: none; /* for button */
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+input::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+button {
+  background-color: rgb(36, 241, 152);
+  padding: 1em;
+  border-radius: 0.5em;
+}
+.btn--small {
+  padding: 0.5em;
+}
+.btn--cta{
+  background-color: #2196F3;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
 </style>

@@ -1,19 +1,26 @@
 <template>
   <div>
-    <h1>when</h1>
-    <div v-for="game in games" :key="game.id">
+    <div class="user">
+      <img class="user__avatar" src="https://i.pinimg.com/originals/7c/c7/a6/7cc7a630624d20f7797cb4c8e93c09c1.png" alt="">
+      <div class="user__text">
+        <span>{{this.$store.state.username}}</span>
+      </div>
+    </div>
+    <!-- <div v-for="game in games" :key="game.id">
       <button @click="play(game.id)">
         <span v-for="year in game.years" :key="year">[{{year}}]</span>
         <span v-for="lives in game.lives" :key="lives">*</span>
       </button>
+    </div> -->
+    <div class="actions">
+      <button @click="newGame">Nytt spel</button>
+      <button @click="resume" v-if="hasOngoingGameId">Fortsätt spel</button>
     </div>
-    <button @click="newGame">New game</button>
-    <button @click="clean">Remove all</button>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Games',
   methods: {
@@ -21,7 +28,8 @@ export default {
       'startNewGame',
       'updateOngoingGames',
       'setCurrentGame',
-      'removeAllStandardGames']),
+      'removeAllStandardGames'
+    ]),
     async newGame () {
       await this.startNewGame()
       this.$router.push('/play')
@@ -34,8 +42,8 @@ export default {
       }
       return ret
     },
-    async play (id) {
-      await this.setCurrentGame(id)
+    async resume () {
+      await this.setCurrentGame(this.$store.getters.resumeGameId)
       this.$router.push('/play')
     },
     async clean () {
@@ -46,6 +54,9 @@ export default {
     this.updateOngoingGames()
   },
   computed: {
+    ...mapGetters([
+      'hasOngoingGameId'
+    ]),
     games: function () {
       var games = this.$store.state.ongoingGames
       var mapped = games.map(d => this.getGameView(d))
@@ -57,5 +68,26 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.user {
+  border-bottom: 1px solid black;
+  display: flex;
+  padding: 0.5em 1em;
+  align-items: center;
+}
+.user__avatar {
+  width: 3em;
+  height: 3em;
+}
+.user__text {
+  margin-left: 1em;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
 
+.actions > * {
+  margin-bottom: 1em;
+}
 </style>

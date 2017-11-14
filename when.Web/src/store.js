@@ -5,7 +5,7 @@ import Api from './api'
 Vue.use(Vuex)
 
 const state = {
-  username: null,
+  username: 'User',
   ongoingGames: [],
   currentGame: null
 }
@@ -50,7 +50,12 @@ let setCurrentGame = async function (id) {
 }
 
 // getters are functions
-const getters = {}
+const getters = {
+  resumeGameId: () => {
+    return state.ongoingGames[0].id
+  },
+  hasOngoingGameId: () => state.ongoingGames.length
+}
 
 export default new Vuex.Store({
   state,

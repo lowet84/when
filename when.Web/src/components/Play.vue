@@ -5,11 +5,11 @@
     </h3>
     <h4 v-if="game.currentQuestion!=null">{{game.currentQuestion.text}}</h4>
     <div>
-      <button @click="guess(0)">Guess</button>
+      <button @click="guess(0)" class="btn--small btn--cta">Guess</button>
     </div>
     <div v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
       <div>{{completedQuestion.year}}: {{completedQuestion.text}}</div>
-      <button @click="guess(i+1)">Guess</button>
+      <button @click="guess(i+1)" class="btn--small btn--cta">Guess</button>
     </div>
     </br></br>
     <button @click="back">Back</button>
