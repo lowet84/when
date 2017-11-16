@@ -2,7 +2,7 @@ let getUser = async function () {
   return `
     query{
       user{
-        username
+        userName
       }
     }
   `

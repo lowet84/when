@@ -28,7 +28,8 @@ export default {
       'startNewGame',
       'updateOngoingGames',
       'setCurrentGame',
-      'removeAllStandardGames'
+      'removeAllStandardGames',
+      'getUser'
     ]),
     async newGame () {
       await this.startNewGame()
@@ -52,6 +53,7 @@ export default {
   },
   created () {
     this.updateOngoingGames()
+    this.getUser()
   },
   computed: {
     ...mapGetters([

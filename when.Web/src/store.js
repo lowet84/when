@@ -36,6 +36,12 @@ const actions = {
   async answerStandard (store, index) {
     let data = await Api('answerStandard', { id: state.currentGame.id, index: index })
     Vue.set(state, 'currentGame', data.answerStandard.result)
+  },
+  async getUser () {
+    if (state.username === 'User') {
+      let data = await Api('user')
+      Vue.set(state, 'username', data.user.userName)
+    }
   }
 }
 
