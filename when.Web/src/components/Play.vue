@@ -18,7 +18,7 @@
       <div class="q" v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
          
         <span class="q__text">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
-        <button @click="guess(i)" class="btn--small btn--cta q__button">Guess</button>
+        <button @click="guess(i+1)" class="btn--small btn--cta q__button">Guess</button>
       </div>
     </div>
     <!-- <button @click="back">Back</button> -->
