@@ -1,5 +1,6 @@
 <template>
   <div v-if="game!==null">
+    <v-dialog/>
     <div class="flex question">
       <div v-if="game.currentQuestion!=null">{{game.currentQuestion.text}}</div>
       <div class="icon score">
@@ -32,9 +33,25 @@ export default {
   methods: {
     ...mapActions(['answerStandard']),
     async guess (index) {
-      await this.answerStandard(index)
+      let result = await this.answerStandard(index)
       if (this.game.lives === 0) {
         this.$router.push('/summary')
+      } else {
+        let title = ''
+        let text = ''
+        if (result) {
+          title = 'Correct'
+        } else {
+          title = 'Wrong'
+        }
+
+        this.$modal.show('dialog', {
+          title: title,
+          text: text,
+          buttons: [
+            { title: 'Close' }
+          ]
+        })
       }
     },
     back () {
@@ -111,23 +128,22 @@ img {
   margin: 1em;
   position: relative;
 }
-.q__text{
+.q__text {
   display: block;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.q__button{
+.q__button {
   margin-top: 1em;
 }
 .q::before {
   position: absolute;
   left: -2.6em;
-  content:' ';
+  content: " ";
   width: 1em;
   height: 1em;
   background-color: lime;
   border-radius: 50%;
-
 }
 </style>
