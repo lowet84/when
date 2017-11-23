@@ -35,7 +35,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import PlayModal from './Playmodal'
+import PlayModal from './PlayModal'
 export default {
   name: 'Play',
   components: {
