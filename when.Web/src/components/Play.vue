@@ -60,7 +60,7 @@ export default {
         this.modal.text = result ? 'Correct' : 'Wrong'
         this.modal.type = result ? 'success' : 'fail'
         setTimeout(() => {
-          // this.modal.show = false
+          this.modal.show = false
         }, 2000)
       }
     },
