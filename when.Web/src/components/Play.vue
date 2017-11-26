@@ -4,7 +4,7 @@
       <div v-if="game.currentQuestion!=null">{{game.currentQuestion.text}}</div>
       <div class="icon score">
         <div class="icon__border"></div>
-        <span>{{game.completedQuestions.length}}</span>
+        <span>{{completedQuestions.length}}</span>
       </div>
       <div class="icon heart">
         <img src="static/heart.svg" />
@@ -13,28 +13,26 @@
     </div>
     <div class="play-field">
       <div style="margin-left:1em">
-        <button @click="guess(0)" class="btn--small btn--cta">Guess</button>
       </div>
-      <div class="q" v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
-
-        <span class="q__text">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
-        <button @click="guess(i+1)" class="btn--small btn--cta q__button">Guess</button>
+      <div class="q" v-for="(completedQuestion, i) in completedQuestions" :key="completedQuestion.year">
+        <button @click="guess(i)" class="btn--small btn--cta q__button" :style="{marginTop:completedQuestion.marginTop}">Guess</button>
+        <span class="q__text" :style="{marginTop:completedQuestion.marginTop}">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
       </div>
+      <button @click="guess(completedQuestions.length)" class="btn--small btn--cta">Guess</button>
+      
     </div>
     <div class="modal" v-if="modal.show"> 
-      <!--  -->
       <div class="modal-body">
         <div class="modal-body-content">
           <play-modal :type="modal.type"></play-modal>
         </div>
-        <!-- <button class="modal-body-closer" @click="modal.show = false">Stäng</button> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import PlayModal from './Playmodal'
 export default {
   name: 'Play',
@@ -74,13 +72,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'completedQuestions'
+    ]),
     game: function () {
       let game = this.$store.state.currentGame
       if (game === null) return null
-      let completedQuestions = game.completedQuestions.sort((a, b) => { return a.year - b.year })
       let ret = {
         lives: game.lives,
-        completedQuestions: completedQuestions,
         currentQuestion: game.currentQuestion
       }
       return ret

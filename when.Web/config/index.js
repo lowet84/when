@@ -33,7 +33,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:7000',
+        target: 'https://whengame.se',
         changeOrigin: true,
         // pathRewrite: {
         //   '^/api': ''

@@ -61,7 +61,21 @@ const getters = {
   resumeGameId: () => {
     return state.ongoingGames[0].id
   },
-  hasOngoingGameId: () => state.ongoingGames.length
+  hasOngoingGameId: () => state.ongoingGames.length,
+  completedQuestions: () => {
+    if (state.currentGame === null) return null
+
+    const ret = state.currentGame.completedQuestions
+      .sort((a, b) => { return a.year - b.year })
+      .reduce((acc, question) => {
+        const marginTop = (acc.length
+          ? Math.max((question.year - acc[acc.length - 1].year) * 1.3, 16)
+          : 16) + 'px'
+        return [...acc, { ...question, marginTop }]
+      })
+    console.log(ret)
+    return ret
+  }
 }
 
 export default new Vuex.Store({
