@@ -93,7 +93,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 .question {
   box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.3);
   padding: 1em;
