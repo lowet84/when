@@ -11,22 +11,14 @@ export default {
 </script>
 
 <style>
+:root{
+   --color-timeline: #ccc;
+}
+
 body {
   height: 1vh;
   background-color: #fff;
 }
-
-/* 89ffcc */
-
-/* [role="button"],
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
-button {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-} */
 
 /* Reset `button` and button-style `input` default styles */
 input[type="submit"],
