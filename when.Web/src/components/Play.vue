@@ -12,22 +12,21 @@
       </div>
     </div>
     <div class="play-field">
-      <div style="margin-left:1em">
-        <button @click="guess(0)" class="btn--small btn--cta">Guess</button>
-      </div>
+      
       <div class="q" v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
+        <button @click="guess(i)" class="btn--small btn--cta q__button" :style="'margin-top:'+completedQuestion.diff">Välj</button>
+        <span class="q__text" :style="'margin-top:'+completedQuestion.diff">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
 
-        <span class="q__text">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
-        <button @click="guess(i+1)" class="btn--small btn--cta q__button">Guess</button>
+      </div>
+      <div class="q">
+        <button @click="guess(game.completedQuestions.length)" class="btn--small btn--cta" :style="'margin-top:1em'">Välj</button>
       </div>
     </div>
     <div class="modal" v-if="modal.show"> 
-      <!--  -->
       <div class="modal-body">
         <div class="modal-body-content">
           <play-modal :type="modal.type"></play-modal>
         </div>
-        <!-- <button class="modal-body-closer" @click="modal.show = false">Stäng</button> -->
       </div>
     </div>
   </div>
@@ -36,6 +35,14 @@
 <script>
 import { mapActions } from 'vuex'
 import PlayModal from './Playmodal'
+const yearReducer = (acc, item) => {
+  let diff = acc.length
+    ? Math.max((item.year - acc[acc.length - 1].year) * 0.08125, 1)
+    : 1
+  diff += 'rem'
+  return [...acc, { ...item, diff }]
+}
+
 export default {
   name: 'Play',
   components: {
@@ -45,7 +52,8 @@ export default {
     return {
       modal: {
         show: false,
-        text: ''
+        text: '',
+        type: ''
       }
     }
   },
@@ -77,7 +85,8 @@ export default {
     game: function () {
       let game = this.$store.state.currentGame
       if (game === null) return null
-      let completedQuestions = game.completedQuestions.sort((a, b) => { return a.year - b.year })
+      let completedQuestions = game.completedQuestions.sort((a, b) => a.year - b.year)
+      completedQuestions = completedQuestions.reduce(yearReducer, [])
       let ret = {
         lives: game.lives,
         completedQuestions: completedQuestions,
@@ -86,6 +95,7 @@ export default {
       return ret
     },
     first: function () {
+      console.warn('används den här?')
       return Math.min.apply(null, this.game.years)
     }
   }
@@ -107,91 +117,87 @@ export default {
   height: 3rem;
   flex-shrink: 0;
   text-align: center;
-}
 
-.icon__border {
-  border: 0.25rem solid #ccc;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-}
+  &__border {
+    border: 0.25rem solid #ccc;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+  }
 
-img {
-  width: 100%;
-}
-
-.icon span {
-  position: absolute;
-  top: 0.2em;
-  font-size: 1.5rem;
-  left: 0;
-  right: 0;
-}
-
-.icon.heart span {
-  color: white;
+  img {
+    width: 100%;
+  }
+  span {
+    position: absolute;
+    top: 0.2em;
+    font-size: 1.5rem;
+    left: 0;
+    right: 0;
+  }
+  &.heart span {
+    color: white;
+  }
 }
 
 .play-field {
+ 
   margin: 1em;
-  border-left: 0.2em lime solid;
+  border-left: 0.2em var(--color-timeline) solid;
   padding-left: 1em;
 }
 
 .q {
-  margin: 1em;
+  margin: 0 1em;
   position: relative;
+
+  &__text {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &::before {
+      position: absolute;
+      left: -2.6em;
+      content: " ";
+      width: 1em;
+      height: 1em;
+      background-color: var(--color-timeline);
+      border-radius: 50%;
+    }
+  }
+
+  & &__button {
+    margin-top: 1em;
+  }
 }
 
-.q__text {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.q__button {
-  margin-top: 1em;
-}
-
-.q::before {
-  position: absolute;
-  left: -2.6em;
-  content: " ";
-  width: 1em;
-  height: 1em;
-  background-color: lime;
-  border-radius: 50%;
-}
-
-.modal{
+.modal {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.3)
-}
-.modal-body{
-  position: absolute;
-  top: 20%;
-  left: 10%;
-  width: 80%;
-  height: 16em;
-  border-radius: 0.5em;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  
-}
-.modal-body-content{
-  flex-grow: 1;
-  padding: 1em;
-  display: flex;
-  align-items: center;
-}
-.modal-body-closer{
-  border-top: 1px solid #eee;
-  width:100%;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  &-body {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 80%;
+    height: 16em;
+    border-radius: 0.5em;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+
+    &-content {
+      flex-grow: 1;
+      padding: 1em;
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 </style>

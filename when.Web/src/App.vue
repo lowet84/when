@@ -53,7 +53,7 @@ button {
   padding: 0.5em;
 }
 .btn--cta {
-  background-color: #2196f3;
+  /* background-color: #2196f3; */
 }
 body {
   padding: 0;
