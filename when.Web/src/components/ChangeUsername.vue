@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'ChangeUsername',
   computed: {
@@ -22,7 +22,7 @@ export default {
       await this.saveUsername()
       this.$router.push('/')
     },
-    ...mapMutations(['saveUsername'])
+    ...mapActions(['saveUsername'])
   }
 }
 </script>

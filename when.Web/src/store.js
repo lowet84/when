@@ -4,68 +4,67 @@ import Api from './api'
 
 Vue.use(Vuex)
 
-const state = {
-  username: 'User',
-  ongoingGames: [],
-  currentGame: null
-}
-
 const mutations = {
-  async saveUsername (state) {
-    await Api('setUsername', { username: state.username })
+  setCurrentGame (state, currentGame) {
+    state.currentGame = currentGame
+  },
+  setOngoingGames (state, ongoingGames) {
+    state.ongoingGames = ongoingGames
+  },
+  setUsername (state, username) {
+    state.username = username
   }
 }
 
 const actions = {
-  async startNewGame (store) {
+  async saveUsername (state) {
+    await Api('setUsername', { username: state.username })
+  },
+  async startNewGame ({ dispatch }) {
     var newGame = await Api('startNewGame')
     let id = newGame.startNewStandardGame.result.id
-    await updateOngoingGames()
-    await setCurrentGame(id)
+    await dispatch('updateOngoingGames')
+    dispatch('setCurrentGame', id)
   },
-  async updateOngoingGames () {
-    await updateOngoingGames()
+  async updateOngoingGames ({ commit }) {
+    var games = await Api('ongoingGames')
+    commit('setOngoingGames', games.standardGamesOngoing)
   },
-  async setCurrentGame (store, id) {
-    await setCurrentGame(id)
+  async setCurrentGame ({ commit }, id) {
+    let data = await Api('currentGame', { id: id })
+    commit('setCurrentGame', data.standardGame)
   },
-  async removeAllStandardGames () {
+  async removeAllStandardGames ({ dispatch }) {
     await Api('removeAllStandardGames')
-    await updateOngoingGames()
+    dispatch('updateOngoingGames')
   },
-  async answerStandard (store, index) {
+  async answerStandard ({ state, commit }, index) {
     let data = await Api('answerStandard', { id: state.currentGame.id, index: index })
-    Vue.set(state, 'currentGame', data.answerStandard.result)
+    commit('setCurrentGame', data.answerStandard.result)
     return data.answerStandard.success
   },
-  async getUser () {
+  async getUser ({ state, commit }) {
     if (state.username === 'User') {
       let data = await Api('user')
-      Vue.set(state, 'username', data.user.userName)
+      commit('setUsername', data.user.userName)
     }
   }
 }
 
-let updateOngoingGames = async function () {
-  var games = await Api('ongoingGames')
-  Vue.set(state, 'ongoingGames', games.standardGamesOngoing)
-}
-
-let setCurrentGame = async function (id) {
-  let data = await Api('currentGame', { id: id })
-  Vue.set(state, 'currentGame', data.standardGame)
-}
-
 // getters are functions
 const getters = {
-  resumeGameId: () => {
+  resumeGameId: state => {
     return state.ongoingGames[0].id
   },
-  hasOngoingGameId: () => state.ongoingGames.length
+  hasOngoingGameId: state => state.ongoingGames.length
 }
 
 export default new Vuex.Store({
-  state,
+  state: {
+    username: 'User',
+    ongoingGames: [],
+    currentGame: null
+  },
   getters,
   actions,
   mutations
