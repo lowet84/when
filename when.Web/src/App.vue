@@ -11,13 +11,18 @@ export default {
 </script>
 
 <style>
-:root{
-   --color-timeline: #ccc;
+:root {
+  --color-timeline: #555;
 }
 
 body {
   height: 1vh;
   background-color: #fff;
+  font-family: "Open Sans", sans-serif;
+  color: #eee;
+background: #ff4b00;
+
+
 }
 
 /* Reset `button` and button-style `input` default styles */
@@ -45,12 +50,17 @@ button::-moz-focus-inner {
 }
 
 button {
-  background-color: rgb(36, 241, 152);
-  padding: 1em;
+  background-color: #333;
+  color: #fff;
+  padding: 0.6em;
   border-radius: 0.5em;
+  outline: unset;
 }
 .btn--small {
-  padding: 0.5em;
+  font-size: 0.75em;
+}
+.btn--big {
+  font-size: 1.1em;
 }
 .btn--cta {
   /* background-color: #2196f3; */

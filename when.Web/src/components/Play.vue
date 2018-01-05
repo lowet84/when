@@ -1,44 +1,34 @@
 <template>
-  <div v-if="game!==null">
-    <div class="flex question">
-      <div v-if="game.currentQuestion!=null">{{game.currentQuestion.text}}</div>
-      <div class="icon score">
-        <div class="icon__border"></div>
-        <span>{{game.completedQuestions.length}}</span>
-      </div>
-      <div class="icon heart">
-        <img src="static/heart.svg" />
-        <span>{{game.lives}}</span>
-      </div>
-    </div>
-    <div class="play-field">
-      
-      <div class="q" v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
-        <button @click="guess(i)" class="btn--small btn--cta q__button" :style="'margin-top:'+completedQuestion.diff">Välj</button>
-        <span class="q__text" :style="'margin-top:'+completedQuestion.diff">{{completedQuestion.year}}: {{completedQuestion.text}}</span>
-
-      </div>
-      <div class="q">
-        <button @click="guess(game.completedQuestions.length)" class="btn--small btn--cta" :style="'margin-top:1em'">Välj</button>
-      </div>
-    </div>
-    <div class="modal" v-if="modal.show"> 
-      <div class="modal-body">
-        <div class="modal-body-content">
-          <play-modal :type="modal.type"></play-modal>
+  <div v-if="game!==null" class="play">
+    <play-header v-if="game.currentQuestion" :question="game.currentQuestion" :score="game.completedQuestions.length" :lives="game.lives"></play-header>
+    <div class="play__container">
+      <div class="play__field">
+        <div class="q" v-for="(completedQuestion, i) in game.completedQuestions" :key="completedQuestion.year">
+          <button @click="guess(i)" class="btn btn--big btn--cta" :style="'margin-top:'+completedQuestion.diff">{{i===0?'Före':'Mellan'}}</button>
+          <div class="q__text" :style="'margin-top:'+completedQuestion.diff">
+            <span class="q__text-year">{{completedQuestion.year}}</span>
+            <span>{{completedQuestion.text}}</span>
+          </div>
+        </div>
+        <div class="q">
+          <button @click="guess(game.completedQuestions.length)" class="btn btn--big btn--cta" :style="'margin-top:'+game.completedQuestions[0].diff">Efter</button>
         </div>
       </div>
     </div>
+    <play-modal :type="modal.type" v-if="modal.show"></play-modal>
   </div>
+
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import PlayModal from './Playmodal'
+import PlayHeader from './PlayHeader'
 const yearReducer = (acc, item) => {
+  let minDiff = 0.5
   let diff = acc.length
-    ? Math.max((item.year - acc[acc.length - 1].year) * 0.08125, 1)
-    : 1
+    ? Math.max(Math.sqrt(item.year - acc[acc.length - 1].year) / 2, minDiff)
+    : minDiff
   diff += 'rem'
   return [...acc, { ...item, diff }]
 }
@@ -46,7 +36,8 @@ const yearReducer = (acc, item) => {
 export default {
   name: 'Play',
   components: {
-    'play-modal': PlayModal
+    'play-modal': PlayModal,
+    'play-header': PlayHeader
   },
   data: function () {
     return {
@@ -84,7 +75,9 @@ export default {
   computed: {
     game: function () {
       let game = this.$store.state.currentGame
-      if (game === null) return null
+      if (!game) {
+        return null
+      }
       let completedQuestions = game.completedQuestions.sort((a, b) => a.year - b.year)
       completedQuestions = completedQuestions.reduce(yearReducer, [])
       let ret = {
@@ -101,55 +94,51 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.question {
-  box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.3);
-  padding: 1em;
+.play {
+  --width-timeline-area: 4.9375rem;
+
   display: flex;
-}
+  flex-direction: column;
+  height: 100vh;
 
-.icon {
-  position: relative;
-  margin-left: 1em;
-  width: 3rem;
-  height: 3rem;
-  flex-shrink: 0;
-  text-align: center;
+  header {
+    flex-shrink: 0;
+  }
 
-  &__border {
-    border: 0.25rem solid #ccc;
-    border-radius: 50%;
-    width: 100%;
+  &__container {
+    overflow: auto;
+    flex-grow: 1;
+    padding-left: 0.5em;
+    background: -webkit-linear-gradient(
+      to right,
+      #1fddff,
+      #ff4b1f
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #1fddff calc(var(--width-timeline-area) - 2rem),
+      #ff6900 calc(var(--width-timeline-area) + 2rem),
+      #ff4b00
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  &__field {
+        
+    --width-timeline: 0.5rem;
+    margin-left: calc((var(--width-timeline-area) - var(--width-timeline)) / 2);
+    border-left: var(--width-timeline) var(--color-timeline) solid;
+    padding-left: calc(
+       (var(--width-timeline-area) - var(--width-timeline)) / 2
+    );
     height: 100%;
+    
   }
-
-  img {
-    width: 100%;
-  }
-  span {
-    position: absolute;
-    top: 0.2em;
-    font-size: 1.5rem;
-    left: 0;
-    right: 0;
-  }
-  &.heart span {
-    color: white;
-  }
-}
-
-.play-field {
- 
-  margin: 1em;
-  border-left: 0.2em var(--color-timeline) solid;
-  padding-left: 1em;
 }
 
 .q {
-  margin: 0 1em;
   position: relative;
+  padding-left: 1em;
 
   &__text {
     display: block;
@@ -157,46 +146,30 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    &::before {
+    &-year {
+      --padding-top: 0.3em;
+      --padding-left: 0.5em;
+
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #eee;
       position: absolute;
-      left: -2.6em;
+      left: calc(-1 * var(--width-timeline-area));
+      background-color: var(--color-timeline);
+      border-radius: 30px;
+      bottom: calc(-1 * var(--padding-top) - 0.25rem);
+      padding: var(--padding-top) var(--padding-left);
+    }
+    &::before {
+      --size: 1em;
+      position: absolute;
+      left: calc(-2.1em - var(--size)/2);
       content: " ";
-      width: 1em;
-      height: 1em;
+      width: var(--size);
+      height: var(--size);
       background-color: var(--color-timeline);
       border-radius: 50%;
-    }
-  }
-
-  & &__button {
-    margin-top: 1em;
-  }
-}
-
-.modal {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-
-  &-body {
-    position: absolute;
-    top: 20%;
-    left: 10%;
-    width: 80%;
-    height: 16em;
-    border-radius: 0.5em;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-
-    &-content {
-      flex-grow: 1;
-      padding: 1em;
-      display: flex;
-      align-items: center;
+      bottom: calc(-(var(--size) - 1em)/2);
     }
   }
 }
