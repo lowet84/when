@@ -22,7 +22,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import PlayModal from './Playmodal'
+import PlayModal from './PlayModal'
 import PlayHeader from './PlayHeader'
 const yearReducer = (acc, item) => {
   let minDiff = 0.5
