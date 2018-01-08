@@ -41,7 +41,7 @@ namespace when.ApiServer
             if (existing.Length == 0)
             {
                 var questions = new List<Question>();
-                var json = Resource.Questions;
+                var json = DefaultQuestions.Questions;
                 var data = JsonConvert.DeserializeObject<QuestionData[]>(json);
 
                 foreach (var item in data)
